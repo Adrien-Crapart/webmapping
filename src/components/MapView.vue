@@ -10,27 +10,20 @@
     <div id="popup-content"></div>
   </div>
   <layer-panel :layers="layers" @toggle-layer="toggleLayer"></layer-panel>
-  <address-search @address-selected="updateMapLocation"></address-search>
+  <address-search @address-selected="handleAddressSelected"></address-search>
 </template>
 
 <script>
 import 'boxicons'
 import 'ol/ol.css';
-import GeoJSON from 'ol/format/GeoJSON.js';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import TileWMS from 'ol/source/TileWMS.js';
-import VectorLayer from 'ol/layer/Vector.js';
-import VectorSource from 'ol/source/Vector.js';
 import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import Overlay from 'ol/Overlay.js';
 import {DragBox, DragRotateAndZoom, Select, Snap, Draw, Modify, defaults as defaultInteractions} from 'ol/interaction.js';
-import {Fill, Stroke, Style} from 'ol/style.js';
-import {getWidth} from 'ol/extent.js';
-import { platformModifierKeyOnly } from 'ol/events/condition.js';
-import XYZ from 'ol/source/XYZ.js';
 import {useGeographic, toLonLat} from 'ol/proj.js';
 import { FullScreen, ScaleLine, defaults as defaultControls } from 'ol/control.js';
 import { toStringHDMS, createStringXY } from 'ol/coordinate.js';
@@ -42,17 +35,12 @@ import AddressSearch from './AddressSearch.vue';
 export default {
   data() {
     return {
+      selectedCoordinates: null,
+      map: null,
+      mapView: null,
       layers: [
         {
           id: 1,
-          title: 'OSM',
-          visible: true,
-          layer: new TileLayer({
-            source: new OSM(),
-          }),
-        },
-        {
-          id: 2,
           title: 'Parcelles',
           visible: true,
           layer: new TileLayer({
@@ -65,7 +53,6 @@ export default {
             })
           }),
         },
-        // Add more layers as needed
       ],
     };
   },
@@ -88,8 +75,14 @@ export default {
       return false;
     };
 
-    // Create a map instance
-    const map = new Map({
+    this.mapView = new View({
+      center: fromLonLat([6.062899, 43.411056]),
+      zoom: 13,
+      maxZoom: 23,
+      minZoom: 10
+    });
+
+    this.map = new Map({
       target: 'map',
       controls: defaultControls().extend([
         new FullScreen(),
@@ -105,17 +98,17 @@ export default {
       ]),
       overlays: [overlay],
       interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
-      view: new View({
-        center: fromLonLat([6.062899, 43.411056]),
-        zoom: 13,
-        maxZoom: 23,
-        minZoom: 10
-      }),
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+      ],
+      view: this.mapView
     });
 
     // Add layers to the map
     this.layers.forEach((layer) => {
-      map.addLayer(layer.layer);
+      this.map.addLayer(layer.layer);
     });
 
     // Copy coordinate function
@@ -134,7 +127,7 @@ export default {
     /**
      * Add a click handler to the map to render the popup.
      */
-    map.on('singleclick', function (evt) {
+    this.map.on('singleclick', function (evt) {
       const coordinate = evt.coordinate;
       const hdms = toStringHDMS(toLonLat(coordinate));
 
@@ -148,11 +141,15 @@ export default {
       layer.visible = !layer.visible;
       layer.layer.setVisible(layer.visible);
     },
-    updateMapLocation(coordinates) {
-      // Update the map's view to display the selected address
-      const view = this.map.getView();
-      view.setCenter(fromLonLat(coordinates));
-      view.setZoom(14); // Adjust the zoom level as needed
+    handleAddressSelected(addressInfo) {
+      this.selectedCoordinates = addressInfo;  
+      this.updateMapView();
+    },
+    updateMapView() {
+      if (this.selectedCoordinates) {  
+        this.mapView.setCenter(fromLonLat([this.selectedCoordinates.lon, this.selectedCoordinates.lat]));
+        this.mapView.setZoom(this.selectedCoordinates.zoomLevel);
+      }
     },
   },
   components: {

@@ -26,7 +26,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Add styling for the layer panel here */
 .layer-panel {
   width: 250px;
