@@ -23,6 +23,10 @@ import TileWMS from 'ol/source/TileWMS.js';
 import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import Overlay from 'ol/Overlay.js';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
 import {DragBox, DragRotateAndZoom, Select, Snap, Draw, Modify, defaults as defaultInteractions} from 'ol/interaction.js';
 import {useGeographic, toLonLat} from 'ol/proj.js';
 import { FullScreen, ScaleLine, defaults as defaultControls } from 'ol/control.js';
@@ -38,6 +42,7 @@ export default {
       selectedCoordinates: null,
       map: null,
       mapView: null,
+      localisation: null,
       layers: [
         {
           id: 1,
@@ -111,6 +116,20 @@ export default {
       this.map.addLayer(layer.layer);
     });
 
+    // Create a VectorSource for the point
+    this.localisation = new VectorSource();
+    var pointLayer = new VectorLayer({
+      source: localisation,
+      style: new Style({
+        image: new Circle({
+          radius: 6,
+          fill: new Fill({ color: 'red' }),
+          stroke: new Stroke({ color: 'white', width: 2 }),
+        }),
+      }),
+    });
+    this.map.addLayer(pointLayer);
+
     // Copy coordinate function
     this.copyCoordinate = function () {
       const mousePositionElement = document.getElementById('mouse-position');
@@ -149,6 +168,9 @@ export default {
       if (this.selectedCoordinates) {  
         this.mapView.setCenter(fromLonLat([this.selectedCoordinates.lon, this.selectedCoordinates.lat]));
         this.mapView.setZoom(this.selectedCoordinates.zoomLevel);
+        const coordinates = fromLonLat([this.selectedCoordinates.lat, this.selectedCoordinates.lon]); // Example coordinates
+        const pointFeature = new Feature(new Point(coordinates));
+        this.localisation.addFeature(pointFeature);
       }
     },
   },
