@@ -11,6 +11,8 @@
   </div>
   <layer-panel :layers="layers" @toggle-layer="toggleLayer"></layer-panel>
   <address-search @address-selected="handleAddressSelected"></address-search>
+  <CardInfo/>
+  <Loader/>
 </template>
 
 <script>
@@ -35,6 +37,8 @@ import MousePosition from 'ol/control/MousePosition.js';
 
 import LayerPanel from './LayerPanel.vue';
 import AddressSearch from './AddressSearch.vue';
+import CardInfo from './CardInfo.vue';
+import Loader from './Loader.vue';
 
 export default {
   data() {
@@ -177,6 +181,8 @@ export default {
   components: {
     LayerPanel,
     AddressSearch,
+    CardInfo,
+    Loader
   },
 };
 </script>
@@ -195,6 +201,7 @@ body {
    display: flex; 
    justify-content: center;
    align-items: center;
+   justify-content: center;
    min-height: 100vh;
 }
 .map {
@@ -204,16 +211,19 @@ body {
   bottom: 0;
   right: 0;
   z-index: 1;
-}
-.map:-webkit-full-screen {
-  height: 100%;
-  margin: 0;
-}
-.map:fullscreen {
-  height: 100%;
-}
-.map .ol-rotate {
-  top: 3em;
+
+  &:-webkit-full-screen {
+    height: 100%;
+    margin: 0;
+  }
+
+  &:fullscreen {
+    height: 100%;
+  }
+
+  .ol-rotate {
+    top: 3em;
+  }
 }
 .ol-popup {
   position: absolute;
@@ -235,27 +245,31 @@ body {
     position: absolute;
     pointer-events: none;
   }
+
+  &:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+  }
+
+  &:before {
+    border-top-color: #cccccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+  }
 }
-.ol-popup:after {
-  border-top-color: white;
-  border-width: 10px;
-  left: 48px;
-  margin-left: -10px;
-}
-.ol-popup:before {
-  border-top-color: #cccccc;
-  border-width: 11px;
-  left: 48px;
-  margin-left: -11px;
-}
+
 .ol-popup-closer {
   text-decoration: none;
   position: absolute;
   top: 2px;
   right: 8px;
-}
-.ol-popup-closer:after {
-  content: "✖";
+
+  &:after {
+    content: "✖";
+  }
 }
 
 #mouse-position {
