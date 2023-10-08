@@ -1,6 +1,12 @@
 <template>
   <div class="address-search">
-    <input v-model="searchQuery" @input="handleInputChange" placeholder="Search for an address..." />
+    <div class="searchbar">
+      <button @click="toggleSearch">{{ isParcel ? 'Rechercher par lieu' : 'Rechercher par parcelle' }}</button>
+      <input v-model="searchQuery" v-if="!isParcel" @input="handleInputChange" placeholder="Rechercher une adresse" />
+      <input v-model="searchCity" v-if="isParcel" @input="performCitySearch" placeholder="Commune" />
+      <input v-model="searchSection" v-if="isParcel" @input="handleInputChange" placeholder="Section" />
+      <input v-model="searchParcel" v-if="isParcel" @input="handleInputChange" placeholder="Parcelle" />
+    </div>
     <ul v-if="searchResults.length">
       <li v-for="result in searchResults" :key="result.id" @click="selectAddress(result)">
         {{ result.displayName }}
@@ -25,12 +31,28 @@ export default {
     return {
       searchQuery: '',
       searchResults: [],
+      searchCity: '',
+      searchSection: '',
+      searchParcel: '',
+      isParcel: false,
     };
   },
   methods: {
     handleInputChange() {
-      if (this.searchQuery.length >= 5) {
-        this.performAddressSearch();
+      clearTimeout(this.inputTimeout);
+
+      this.inputTimeout = setTimeout(() => {
+        if (this.searchQuery.length >= 5) {
+          this.performAddressSearch();
+        } else {
+          this.searchResults = [];
+        }
+      }, 500);
+    },
+    async performCitySearch() {
+      if (this.searchCity.length === 2) {
+        const response = await axios.get(`https://www.geoportail-urbanisme.gouv.fr/api/grid/municipalities/by-departement?name=${encodeURIComponent(this.searchCity)}`);
+        this.searchResults = this.parseCityResponse(response.data);
       } else {
         this.searchResults = [];
       }
@@ -55,6 +77,14 @@ export default {
       } catch (error) {
         console.error('Error performing address search:', error);
       }
+    },
+    parseCityResponse(data) {
+      // Parse and format results from the Nominatim API
+      return data.municipalities.map(result => ({
+        id: String(result.insee),
+        displayName: String(result.insee + ' - ' + result.title),
+        tag: ''
+      }));
     },
     parseNominatimResponse(data) {
       // Parse and format results from the Nominatim API
@@ -101,6 +131,9 @@ export default {
         zoomLevel: zoomLevel,
       });
     },
+    toggleSearch() {
+      this.isParcel = !this.isParcel;
+    },
   },
 };
 </script>
@@ -108,20 +141,42 @@ export default {
 <style scoped lang="scss">
 .address-search {
   position: absolute;
+  padding: 10px;
+  width: 50vw;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  align-items: center;
+  border-radius: 5px;
   right: 6vw;
   top: 1vh;
-  z-index: 2;
+  z-index: 3;
+
+  & .searchbar {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  button {
+    font-size: 12px;
+    margin-right: 5px;
+  }
 
   input {
     width: 100%;
-    padding: 5px;
-    margin-bottom: 5px;
+    padding: 5px 0 5px 0;
+    margin: 5px;
+    cursor: pointer;
   }
 
   ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    width: 100%;   
+    overflow: auto;
 
     li {
       cursor: pointer;
@@ -130,6 +185,7 @@ export default {
       background-color: #f0f0f0;
       border: 1px solid #ccc;
       margin-bottom: 2px;
+      line-height: 1.5;
     }  
   }
 }

@@ -70,7 +70,7 @@ export default {
   position: absolute;
   bottom: 20px;
   right: 5px;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
   transition: width 0.3s, background-color 0.3s;
 
