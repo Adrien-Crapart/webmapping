@@ -33,15 +33,19 @@ export default {
 
 <style scoped lang="scss">
 .layer-panel {
+  display: block;
   width: 250px;
-  background-color: #fff;
-  border-radius: 20px;
+  height: 100%;
+  background-color: #F8F8F8;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   padding: 10px;
   position: absolute;
-  top: 10vh;
-  left: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  top: 0;
+  left: 0;
   z-index: 2;
+  transition: all 0.5s ease;
   
   .layer-block {
     margin-bottom: 10px;
