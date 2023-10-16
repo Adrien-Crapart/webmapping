@@ -1,7 +1,6 @@
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
-import { fromLonLat } from "ol/proj";
 
 export const layers = [
   {
@@ -9,6 +8,10 @@ export const layers = [
     title: "OSM",
     visible: true,
     type: "TileLayer",
+    legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 1,
+
     layer: new TileLayer({ source: new OSM() }),
   },
   {
@@ -16,7 +19,11 @@ export const layers = [
     title: "Parcelles",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 1,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs.ign.fr/parcellaire/geoportail/r/wms?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -27,7 +34,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -36,7 +42,12 @@ export const layers = [
     title: "Radon",
     visible: false,
     type: "TileWMS",
+    legend:
+      "https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=RADON_COMMUNE&format=image/png&STYLE=default",
+    layer_group: "Risques",
+    layer_order: 1,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -47,7 +58,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -56,18 +66,22 @@ export const layers = [
     title: "Séisme",
     visible: false,
     type: "TileWMS",
+    legend:
+      "https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=risq_zonage_sismique&format=image/png&STYLE=default",
+    layer_group: "Risques",
+    layer_order: 2,
     layer: new TileLayer({
+      opacity: 1,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
           LAYERS: "risq_zonage_sismique",
           TILED: false,
-          // 'FORMAT': 'image/png',
+          FORMAT: "image/png",
         },
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.9,
       }),
     }),
   },
@@ -76,7 +90,12 @@ export const layers = [
     title: "Obligations de débrouissaillement",
     visible: false,
     type: "TileWMS",
+    legend:
+      "https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ZONAGE_OLD&format=image/png&STYLE=default",
+    layer_group: "Risques",
+    layer_order: 3,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -87,7 +106,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -96,7 +114,12 @@ export const layers = [
     title: "Argiles",
     visible: false,
     type: "TileWMS",
+    legend:
+      "https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ALEARG&format=image/png&STYLE=default",
+    layer_group: "Risques",
+    layer_order: 4,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -107,7 +130,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -116,7 +138,12 @@ export const layers = [
     title: "Canalisation de transports de matières dangereuses",
     visible: false,
     type: "TileWMS",
+    legend:
+      "https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=CANALISATIONS&format=image/png&STYLE=default",
+    layer_group: "Risques",
+    layer_order: 5,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -127,7 +154,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -136,7 +162,11 @@ export const layers = [
     title: "Photo Aérienne",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 2,
     layer: new TileLayer({
+      opacity: 1,
       source: new TileWMS({
         url: "https://wxs.ign.fr/inspire/inspire/r/wms?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -147,7 +177,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -156,7 +185,11 @@ export const layers = [
     title: "Zonage",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Urbanisme",
+    layer_order: 1,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -167,7 +200,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -176,7 +208,11 @@ export const layers = [
     title: "SUP",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Urbanisme",
+    layer_order: 2,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -187,7 +223,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -196,7 +231,11 @@ export const layers = [
     title: "SCOT",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Urbanisme",
+    layer_order: 3,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -207,7 +246,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -216,7 +254,11 @@ export const layers = [
     title: "Prescription",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Urbanisme",
+    layer_order: 4,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -227,7 +269,6 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
       }),
     }),
   },
@@ -236,7 +277,11 @@ export const layers = [
     title: "Information",
     visible: false,
     type: "TileWMS",
+    legend: "",
+    layer_group: "Urbanisme",
+    layer_order: 5,
     layer: new TileLayer({
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -247,7 +292,622 @@ export const layers = [
         serverType: "geoserver",
         visible: true,
         transition: 0,
-        opacity: 0.6,
+      }),
+    }),
+  },
+  {
+    id: 14,
+    title: "IGN",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 3,
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/ghxp9vajtqbelq0bjzbtsa47/geoportail/r/wms",
+        params: {
+          LAYERS: "GEOGRAPHICALGRIDSYSTEMS.MAPS",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 15,
+    title: "Parcs nationaux",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 1,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/r/wms",
+        params: {
+          LAYERS: "PROTECTEDAREAS.PN",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 16,
+    title: "Parcs naturels régionaux",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 2,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/r/wms",
+        params: {
+          LAYERS: "PROTECTEDAREAS.PNR",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 17,
+    title:
+      "Zones naturelles d'intérêt écologique faunistique et floristique de type 1",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 3,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/r/wms",
+        params: {
+          LAYERS: "PROTECTEDAREAS.ZNIEFF1",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 18,
+    title:
+      "Zones naturelles d'intérêt écologique faunistique et floristique de type 2",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 4,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/r/wms",
+        params: {
+          LAYERS: "PROTECTEDAREAS.ZNIEFF2",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 19,
+    title: "Forêts publiques",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 5,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/r/wms",
+        params: {
+          LAYERS: "FORETS.PUBLIQUES",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 20,
+    title: "Mesures compensatoires des atteintes à la biodiversité",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Environnement",
+    layer_order: 6,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/environnement/geoportail/v/wms",
+        params: {
+          LAYERS: "MESURES_COMPENSATOIRES",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 21,
+    title: "Bâtiments",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 2,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/topographie/geoportail/v/wms",
+        params: {
+          LAYERS: "BDTOPO-GEOPO-BATI_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 22,
+    title: "Hydrographie",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 3,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/topographie/geoportail/v/wms",
+        params: {
+          LAYERS: "BDTOPO-GEOPO-HYDROGRAPHIE_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 23,
+    title: "Réseau routier",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 4,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/topographie/geoportail/v/wms",
+        params: {
+          LAYERS: "BDTOPO-GEOPO-RESEAU_ROUTIER_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 24,
+    title: "Voies ferrées",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 5,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/topographie/geoportail/v/wms",
+        params: {
+          LAYERS: "BDTOPO-GEOPO-TRANSPORT_VOIES_FERREES_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 25,
+    title: "Végétation",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Cadastre",
+    layer_order: 6,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/topographie/geoportail/v/wms",
+        params: {
+          LAYERS: "BDTOPO-GEOPO-VEGETATION_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 26,
+    title: "PEB (Plans d'exposition aux bruits)",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Nuisances",
+    layer_order: 1,
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/transports/geoportail/v/wms",
+        params: {
+          LAYERS: "DGAC-PEB_BDD_FXX_WM_WMS",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 27,
+    title: "PGS (Plans de gêne sonore)",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 0.5,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/transports/geoportail/v/wms",
+        params: {
+          LAYERS: "DGAC-PGS_BDD_FXX_WM_WMS",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 28,
+    title: "Photographies aériennes 1950-1965",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 29,
+    title: "Photographies aériennes 1980-1995 (inclus Corse)",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1980-1995",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 29,
+    title: "Photographies aériennes 2000-2005",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "	ORTHOIMAGERY.ORTHOPHOTOS2000-2005",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 30,
+    title: "Photographies aériennes 2006-2010",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS2006-2010",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 31,
+    title: "Photographies aériennes 2011-2015",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "	ORTHOIMAGERY.ORTHOPHOTOS2011-2015",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 32,
+    title: "Photographies aériennes 2020",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
+        params: {
+          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS2020",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 33,
+    title: "Corine Land Cover 2018",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/clc/geoportail/r/wms",
+        params: {
+          LAYERS: "LANDCOVER.CLC18",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 34,
+    title: "Lieux nommés",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/cartovecto/geoportail/v/wms",
+        params: {
+          LAYERS: "BDCARTO-LIEUX_NOMMES_WLD_WGS84G",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 35,
+    title: "Contours IRIS",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/cartovecto/geoportail/v/wms",
+        params: {
+          LAYERS: "STATISTICALUNITS.IRIS",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 36,
+    title: "Carte de l'état-major",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/cartes/geoportail/r/wms",
+        params: {
+          LAYERS: "GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 36,
+    title: "Courbes de niveau",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/altimetrie/geoportail/r/wms",
+        params: {
+          LAYERS: "ELEVATION.CONTOUR.LINE",
+          TILED: false,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 37,
+    title: "Registre Parcellaire Graphique (RPG / cultures)",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/agriculture/geoportail/r/wms",
+        params: {
+          LAYERS: "LANDUSE.AGRICULTURE.LATEST",
+          TILED: false,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 38,
+    title: "Base Adresse Nationale",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/adresse/geoportail/v/wms",
+        params: {
+          LAYERS: "BAN.DATA.GOUV",
+          TILED: false,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 39,
+    title: "Limites administratives",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/administratif/geoportail/r/wms",
+        params: {
+          LAYERS: "LIMITES_ADMINISTRATIVES_EXPRESS.LATEST",
+          TILED: false,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
       }),
     }),
   },

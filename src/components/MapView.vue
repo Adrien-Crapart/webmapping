@@ -7,9 +7,9 @@
   </div> -->
   <layer-panel :layers="layers" @toggle-layer="toggleLayerVisibility" @change-opacity="changeLayerOpacity"></layer-panel>
   <address-search @address-selected="handleAddressSelected"></address-search>
-  
-  <CardInfo/>
-  <InfoPanel />
+  <InteractionBar />
+  <!-- <CardInfo/> -->
+  <!-- <InfoPanel /> -->
   <!-- <Loader/> -->
 </template>
 
@@ -37,6 +37,7 @@ import LayerPanel from './LayerPanel.vue';
 import AddressSearch from './AddressSearch.vue';
 import CardInfo from './CardInfo.vue';
 import Loader from './Loader.vue';
+import InteractionBar from './InteractionBar.vue';
 
 import InfoPanel from './InfoPanel.vue';
 import { layers } from '../assets/layers'
@@ -170,6 +171,7 @@ export default {
     CardInfo,
     Loader, 
     InfoPanel,
+    InteractionBar
   },
 };
 </script>
@@ -183,6 +185,7 @@ export default {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     line-height: 1;
+    background: #F8F8F8;
 }
 body {
    display: flex; 
