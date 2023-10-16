@@ -602,6 +602,8 @@ export const layers = [
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Nuisances",
+    layer_order: 2,
     layer: new TileLayer({
       opacity: 0.5,
       source: new TileWMS({
@@ -623,6 +625,8 @@ export const layers = [
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 4,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -644,6 +648,8 @@ export const layers = [
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 5,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -660,11 +666,13 @@ export const layers = [
     }),
   },
   {
-    id: 29,
+    id: 30,
     title: "Photographies aériennes 2000-2005",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 6,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -681,11 +689,13 @@ export const layers = [
     }),
   },
   {
-    id: 30,
+    id: 31,
     title: "Photographies aériennes 2006-2010",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 7,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -702,11 +712,13 @@ export const layers = [
     }),
   },
   {
-    id: 31,
+    id: 32,
     title: "Photographies aériennes 2011-2015",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 8,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -723,11 +735,13 @@ export const layers = [
     }),
   },
   {
-    id: 32,
+    id: 33,
     title: "Photographies aériennes 2020",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 9,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -744,11 +758,13 @@ export const layers = [
     }),
   },
   {
-    id: 33,
+    id: 34,
     title: "Corine Land Cover 2018",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Environnement",
+    layer_order: 7,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -765,11 +781,13 @@ export const layers = [
     }),
   },
   {
-    id: 34,
+    id: 35,
     title: "Lieux nommés",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Cadastre",
+    layer_order: 7,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -786,11 +804,13 @@ export const layers = [
     }),
   },
   {
-    id: 35,
+    id: 36,
     title: "Contours IRIS",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Cadastre",
+    layer_order: 8,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -812,6 +832,8 @@ export const layers = [
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 10,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -828,11 +850,13 @@ export const layers = [
     }),
   },
   {
-    id: 36,
+    id: 37,
     title: "Courbes de niveau",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Environnement",
+    layer_order: 8,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -849,11 +873,13 @@ export const layers = [
     }),
   },
   {
-    id: 37,
+    id: 38,
     title: "Registre Parcellaire Graphique (RPG / cultures)",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Environnement",
+    layer_order: 9,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -870,11 +896,13 @@ export const layers = [
     }),
   },
   {
-    id: 38,
+    id: 39,
     title: "Base Adresse Nationale",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Cadastre",
+    layer_order: 9,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({
@@ -891,11 +919,13 @@ export const layers = [
     }),
   },
   {
-    id: 39,
+    id: 40,
     title: "Limites administratives",
     visible: false,
     type: "TileWMS",
     legend: "",
+    layer_group: "Cadastre",
+    layer_order: 10,
     layer: new TileLayer({
       opacity: 1,
       source: new TileWMS({

@@ -94,14 +94,20 @@ export default {
   transition: all 0.5s ease;
 
   button {
-    background: transparent;
+    background: #bbbbbb!important;
     border: none;
-    color: black;
+    color: white;
     font-size: 16px;
     cursor: pointer;
     text-align: left;
     padding: 5px;
     width: 100%;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      outline: 4px auto -webkit-focus-ring-color;
+    }
   }
 
   .group {
