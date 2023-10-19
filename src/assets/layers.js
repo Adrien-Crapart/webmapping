@@ -71,7 +71,7 @@ export const layers = [
     layer_group: "Risques",
     layer_order: 2,
     layer: new TileLayer({
-      opacity: 1,
+      opacity: 0.6,
       source: new TileWMS({
         url: "https://mapsref.brgm.fr/wxs/georisques/risques?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -189,7 +189,7 @@ export const layers = [
     layer_group: "Urbanisme",
     layer_order: 1,
     layer: new TileLayer({
-      opacity: 0.6,
+      opacity: 0.3,
       source: new TileWMS({
         url: "https://wxs-gpu.mongeoportail.ign.fr/externe/i9ytmrb6tgtq5yfek781ntqi/wms/v?SERVICE=WMS&VERSION=1.3.0",
         params: {
@@ -620,31 +620,8 @@ export const layers = [
     }),
   },
   {
-    id: 28,
-    title: "Photographies aériennes 1950-1965",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 4,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
     id: 29,
-    title: "Photographies aériennes 1980-1995 (inclus Corse)",
+    title: "Photographies aériennes 1950-1965",
     visible: false,
     type: "TileWMS",
     legend: "",
@@ -655,7 +632,7 @@ export const layers = [
       source: new TileWMS({
         url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
         params: {
-          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1980-1995",
+          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
           TILED: true,
           FORMAT: "image/png",
         },

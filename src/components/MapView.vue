@@ -6,8 +6,8 @@
     </button>
   </div> -->
   <layer-panel :layers="layers" @toggle-layer="toggleLayerVisibility" @change-opacity="changeLayerOpacity"></layer-panel>
-  <address-search @address-selected="handleAddressSelected"></address-search>
-  <InteractionBar />
+  <!-- <address-search @address-selected="handleAddressSelected"></address-search> -->
+  <!-- <InteractionBar /> -->
   <!-- <CardInfo/> -->
   <!-- <InfoPanel /> -->
   <!-- <Loader/> -->

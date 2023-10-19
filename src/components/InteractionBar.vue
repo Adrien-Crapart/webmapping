@@ -7,9 +7,18 @@
     </div>      
 
     <div class="edit-bar">
-      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-plus" /></button>
-      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-house" /></button>
-      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-minus" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-pen" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-ruler" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-share" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-image" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-gear" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-eye" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-copy" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-paste" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-vector-square" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-pen-to-square" /></button>
+      <button @click="zoomIn"><font-awesome-icon icon="fa-solid fa-table" /></button>
     </div>
   </div>
 </template>
