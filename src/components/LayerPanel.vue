@@ -1,8 +1,11 @@
 <template>
   <div class="layer-panel">
-    <div v-for="group in layerGroups" :key="group.name">
-      <button @click="toggleGroupVisibility(group)">{{ group.name }}</button>
-      <div class="group" v-show="group.visible">
+    <div v-for="group in layerGroups" :key="group.id">
+      <div class="group-header" @click="toggleGroupVisibility(group.id)">
+        <span>{{ group.name }}</span>
+        <i class="fa" :class="{'fa-chevron-down': group.expanded, 'fa-chevron-up': !group.expanded}"></i>
+      </div>
+      <div class="group" :class="{ expanded: group.expanded }">
         <div v-for="layer in group.layers" :key="layer.id" class="layer-block">
           <label>
             <input type="checkbox" v-model="layer.visible" @change="toggleLayer(layer)" />
@@ -13,11 +16,13 @@
     </div>
 
     <div class="sticky-legend" v-if="hasActiveLayers">
-      <h4>Legend</h4>
+      <h4>Legende</h4>
       <ul>
         <li v-for="layer in activeLayers" :key="layer.id">
-          {{ layer.title }}:
-          <img :src="getLegendUrl(layer.name)" alt="Legend" />
+          <div class="legend-block" v-if="getLegendUrl(layer) !== ''">
+            <p>{{ layer.title }}</p>
+            <img :src="getLegendUrl(layer)" alt="legend" />
+          </div>
         </li>
       </ul>
     </div>
@@ -44,7 +49,12 @@ export default {
         if (existingGroup) {
           existingGroup.layers.push(layer);
         } else {
-          groups.push({ name: layer.layer_group, visible: true, layers: [layer] });
+          groups.push({
+            id: groups.length + 1,
+            name: layer.layer_group,
+            expanded: true,
+            layers: [layer]
+          });
         }
       });
 
@@ -63,15 +73,14 @@ export default {
     changeOpacity(layer) {
       this.$emit('change-opacity', layer);
     },
-    getLegendUrl(layerName) {
-      const legendUrls = {
-        RADON_COMMUNE: 'https://mapsref.brgm.fr/wxs/georisques/risques?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=RADON_COMMUNE&format=image/png&STYLE=default',
-      };
-
-      return legendUrls[layerName] || '';
+    getLegendUrl(layer) {
+      return layer.legend || '';
     },
-    toggleGroupVisibility(group) {
-      group.visible = !group.visible;
+    toggleGroupVisibility(groupId) {
+      const group = this.layerGroups.find((group) => group.id === groupId);
+      if (group) {
+        group.expanded = !group.expanded;
+      }
     },
   },
 };
@@ -84,7 +93,7 @@ export default {
   height: 100%;
   background-color: #F8F8F8;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  padding: 0px 10px 0px;
   position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
@@ -93,7 +102,18 @@ export default {
   z-index: 2;
   transition: all 0.5s ease;
 
-  button {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &:hover{
+    &::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 5px;
+    }
+  }
+
+  .group-header {
     background: #bbbbbb!important;
     border: none;
     color: white;
@@ -110,8 +130,12 @@ export default {
     }
   }
 
+  .group.expanded  {
+    display: block;
+  }
+
   .group {
-    background: white;
+    display: none;
   }
 
   label {
@@ -134,11 +158,28 @@ export default {
   }
 
   .sticky-legend {
+    display: flex;
+    flex-direction: column;
     background: white;
+    max-height: 50vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
     padding: 10px;
     position: sticky;
+    border: 1px solid #ddd;
     bottom: 0;
     border-top: 1px solid #ccc;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &:hover{
+      &::-webkit-scrollbar-thumb {
+        background-color: #555;
+        border-radius: 5px;
+      }
+    }
 
     h4 {
       margin-top: 0;
@@ -149,10 +190,21 @@ export default {
       padding: 0;
     }
 
-    img {
-      max-width: 100%;
-      height: auto;
+    .legend-block {
+      display: flex;
+      flex-direction: column;
+
+      p {
+        font-size: 14px;
+        text-align: left;
+      }
+
+      img {
+        max-width: 100%;
+      }
     }
   }
 }
+
+
 </style>

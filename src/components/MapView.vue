@@ -1,11 +1,26 @@
 <template>
-  <div id="map" class="map"></div>
-  <!-- <div id="mouse-position">
-    <button @click="copyCoordinate">
-      <box-icon name='copy'></box-icon>
-    </button>
+  <!-- <div id="map" class="map"></div> -->
+  <!-- <div class="coordinate-panel">
+    Lat(x) / Lon(y): EPSG:4326
+    <div id="mouse-position"></div>
   </div> -->
-  <layer-panel :layers="layers" @toggle-layer="toggleLayerVisibility" @change-opacity="changeLayerOpacity"></layer-panel>
+  <div>
+    <button @click="toggleExpand">{{ isExpanded ? 'Collapse' : 'Expand' }}</button>
+    <div class="map-container" :class="{ expanded: isExpanded }">
+      <!-- Your map content goes here -->
+      <div class="column">
+        <div class="column-header" @click="toggleColumn">
+          <span>{{ isColumnExpanded ? '▼' : '▶' }} Column</span>
+        </div>
+        <div class="column-content" :class="{ expanded: isColumnExpanded }">
+          <label>couche</label>
+          <!-- Add more items here as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- <layer-panel :layers="layers" @expand-group="toggleGroupVisibility" @toggle-layer="toggleLayer" @change-opacity="changeOpacity"></layer-panel> -->
   <!-- <address-search @address-selected="handleAddressSelected"></address-search> -->
   <!-- <InteractionBar /> -->
   <!-- <CardInfo/> -->
@@ -14,7 +29,6 @@
 </template>
 
 <script>
-import 'boxicons'
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -22,15 +36,9 @@ import TileLayer from 'ol/layer/Tile';
 import TileWMS from 'ol/source/TileWMS.js';
 import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
-import Overlay from 'ol/Overlay.js';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
-import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import {DragBox, DragRotateAndZoom, Select, Snap, Draw, Modify, defaults as defaultInteractions} from 'ol/interaction.js';
-import {useGeographic, toLonLat} from 'ol/proj.js';
-import { FullScreen, ScaleLine, defaults as defaultControls } from 'ol/control.js';
-import { toStringHDMS, createStringXY } from 'ol/coordinate.js';
+import { DragRotateAndZoom, defaults as defaultInteractions} from 'ol/interaction.js';
+import { ScaleLine, defaults as defaultControls } from 'ol/control.js';
+import { createStringXY } from 'ol/coordinate.js';
 import MousePosition from 'ol/control/MousePosition.js';
 
 import LayerPanel from './LayerPanel.vue';
@@ -38,9 +46,9 @@ import AddressSearch from './AddressSearch.vue';
 import CardInfo from './CardInfo.vue';
 import Loader from './Loader.vue';
 import InteractionBar from './InteractionBar.vue';
-
 import InfoPanel from './InfoPanel.vue';
-import { layers } from '../assets/layers'
+
+import { layers } from '../assets/layers';
 
 export default {
   data() {
@@ -48,6 +56,8 @@ export default {
       selectedCoordinates: null,
       map: null,
       mapView: null,
+      isExpanded: false,
+      isColumnExpanded: true,
       basemaps: [
         { id: 'osm-color', title: 'OSM Color', imageUrl: 'src/assets/ic_default-1x.png' },
         { id: 'osm-bw', title: 'OSM Black and White', imageUrl: 'src/assets/ic_terrain-1x.png' },
@@ -74,14 +84,12 @@ export default {
       this.map = new Map({
         target: 'map',
         controls: defaultControls().extend([
-          new FullScreen(),
           new ScaleLine({
             units: 'metric',
           }),
           new MousePosition({
             coordinateFormat: createStringXY(4),
             projection: 'EPSG:4326',
-            className: 'custom-mouse-position',
             target: document.getElementById('mouse-position'),
           })
         ]),
@@ -146,13 +154,8 @@ export default {
       this.map.getView().fit(basemapLayer.getSource().getExtent());
       this.selectedBasemap = basemap.id;
     },
-    toggleLayerVisibility(layer) {
+    toggleLayer(layer) {
       layer.layer.setVisible(layer.visible);
-    },
-    changeLayerOpacity(layer) {
-      if (layer.type === 'TileWMS') {
-        layer.layer.getSource().setOpacity(layer.layer.getOpacity());
-      }
     },
     handleAddressSelected(addressInfo) {
       this.selectedCoordinates = addressInfo;  
@@ -163,6 +166,12 @@ export default {
         this.mapView.setCenter(fromLonLat([this.selectedCoordinates.lon, this.selectedCoordinates.lat]));
         this.mapView.setZoom(this.selectedCoordinates.zoomLevel);
       }
+    },
+    toggleExpand() {
+      this.isExpanded = !this.isExpanded;
+    },
+    toggleColumn() {
+      this.isColumnExpanded = !this.isColumnExpanded;
     },
   },
   components: {
@@ -215,74 +224,64 @@ body {
     top: 3em;
   }
 }
-.ol-popup {
-  position: absolute;
-  background-color: white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #cccccc;
-  bottom: 12px;
-  left: -50px;
-  min-width: 280px;
 
-  &:after,&:before{
-    top: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-  }
-
-  &:after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 48px;
-    margin-left: -10px;
-  }
-
-  &:before {
-    border-top-color: #cccccc;
-    border-width: 11px;
-    left: 48px;
-    margin-left: -11px;
-  }
-}
-
-.ol-popup-closer {
-  text-decoration: none;
-  position: absolute;
-  top: 2px;
-  right: 8px;
-
-  &:after {
-    content: "✖";
-  }
-}
-
-#mouse-position {
+.map-container {
   display: flex;
-  position: fixed;
-  z-index: 3;
-  padding: 1.5px 2px 1.5px 2px;
-  background: white;
-  border-radius: 5px;
-  left: 20vw;
-  bottom: 0.5vh;
-  box-shadow: 5px 6px 24px -2px rgba(0,0,0,0.3);
-  align-items: center;
-  font-size: 10px;
-
-  button {
-    background: #dddcdc;
-    margin-right: 10px;
-  }
-
-  box-icon {
-    width: 20px;
-    height: 20px;
-  }
+  width: 800px; /* Set your desired expanded width */
+  height: 600px; /* Set your desired expanded height */
+  background-color: lightgray; /* Set your desired background color */
+  transition: all 0.3s; /* Add a smooth transition effect */
 }
+
+.column {
+  width: 200px; /* Set your desired column width */
+  background-color: #fff; /* Set your desired column background color */
+  border: 1px solid #ddd; /* Add a border for separation */
+  overflow: hidden;
+}
+
+.column-header {
+  background-color: #f0f0f0; /* Set the header background color */
+  padding: 8px;
+  cursor: pointer;
+}
+
+.column-content {
+  padding: 8px;
+  transition: all 0.3s;
+}
+
+.expanded {
+  width: 400px; /* Set your desired expanded column width */
+}
+
+// .coordinate-panel {
+//   display: flex;
+//   flex-direction: column;
+//   position: fixed;
+//   z-index: 3;
+//   width: 20vw;
+//   height: 3.5vh;
+//   background: white;
+//   padding: 1.5px 2px 1.5px 2px;
+//   border-radius: 5px;
+//   left: 23vw;
+//   bottom: 0.5vh;
+//   box-shadow: 5px 6px 24px -2px rgba(0,0,0,0.3);
+//   align-items: left;
+//   justify-content: left;
+//   font-size: 10px;
+//   font-weight: 500;
+// }
+
+// .ol-mouse-position {
+//     position: none;
+//     top: 0;
+//     right: 0;
+//     margin-top: 10px;
+//     display: flex;
+//     font-size: 12px;
+//     font-weight: 500;
+//     padding: 10px;
+//   }
 </style>
