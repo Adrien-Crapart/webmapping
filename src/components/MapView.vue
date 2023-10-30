@@ -4,18 +4,12 @@
     Lat(x) / Lon(y): EPSG:4326
     <div id="mouse-position"></div>
   </div> -->
-  <div>
-    <button @click="toggleExpand">{{ isExpanded ? 'Collapse' : 'Expand' }}</button>
-    <div class="map-container" :class="{ expanded: isExpanded }">
-      <!-- Your map content goes here -->
-      <div class="column">
-        <div class="column-header" @click="toggleColumn">
-          <span>{{ isColumnExpanded ? '▼' : '▶' }} Column</span>
-        </div>
-        <div class="column-content" :class="{ expanded: isColumnExpanded }">
-          <label>couche</label>
-          <!-- Add more items here as needed -->
-        </div>
+  <div class="wrap-collabsible">
+    <input id="collapsible" class="toggle" type="checkbox">
+    <label for="collapsible" class="lbl-toggle">More Info</label>
+    <div class="collapsible-content">
+      <div class="content-inner">
+        <p>QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without plug-ins. Test-Driven Development.</p>
       </div>
     </div>
   </div>
@@ -225,35 +219,68 @@ body {
   }
 }
 
-.map-container {
-  display: flex;
-  width: 800px; /* Set your desired expanded width */
-  height: 600px; /* Set your desired expanded height */
-  background-color: lightgray; /* Set your desired background color */
-  transition: all 0.3s; /* Add a smooth transition effect */
-}
 
-.column {
-  width: 200px; /* Set your desired column width */
-  background-color: #fff; /* Set your desired column background color */
-  border: 1px solid #ddd; /* Add a border for separation */
-  overflow: hidden;
-}
 
-.column-header {
-  background-color: #f0f0f0; /* Set the header background color */
-  padding: 8px;
-  cursor: pointer;
-}
+input[type='checkbox'] { 
+  display: none; 
+} 
+.wrap-collabsible { 
+  margin: 1.2rem 0; 
+} 
+.lbl-toggle { 
+  display: block; 
+  font-weight: bold; 
+  font-family: monospace; 
+  font-size: 1.2rem; 
+  text-transform: uppercase; 
+  text-align: center; 
+  padding: 1rem; 
+  color: #DDD; 
+  background: #0069ff; 
+  cursor: pointer; 
+  border-radius: 7px; 
+  transition: all 0.25s ease-out; 
 
-.column-content {
-  padding: 8px;
-  transition: all 0.3s;
-}
+  &:hover { 
+    color: #FFF; 
+  } 
 
-.expanded {
-  width: 400px; /* Set your desired expanded column width */
-}
+  &::before { 
+    content: ' '; 
+    display: inline-block; 
+    border-top: 5px solid transparent; 
+    border-bottom: 5px solid transparent; 
+    border-left: 5px solid currentColor; 
+    vertical-align: middle; 
+    margin-right: .7rem; 
+    transform: translateY(-2px); 
+    transition: transform .2s ease-out; 
+  } 
+}  
+.toggle:checked+.lbl-toggle::before { 
+  transform: rotate(90deg) translateX(-3px); 
+} 
+.collapsible-content { 
+  max-height: 0px; 
+  overflow: hidden; 
+  transition: max-height .25s ease-in-out; 
+
+  p { 
+    margin-bottom: 0; 
+  }
+} 
+.toggle:checked + .lbl-toggle + .collapsible-content { 
+  max-height: 350px; 
+} 
+.toggle:checked+.lbl-toggle { 
+  border-bottom-right-radius: 0; 
+  border-bottom-left-radius: 0; 
+} 
+.collapsible-content .content-inner { 
+  border-bottom-left-radius: 7px; 
+  border-bottom-right-radius: 7px; 
+  padding: .5rem 1rem; 
+} 
 
 // .coordinate-panel {
 //   display: flex;
