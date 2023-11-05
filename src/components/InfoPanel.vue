@@ -10,7 +10,7 @@
 
 <script>
 import InteractionBar from './InteractionBar.vue';
-import BasemapPanel from './BasemapPanel.vue';
+import BasemapPanel from './BaseMapPanel_old.vue';
 
 export default {
   data() {

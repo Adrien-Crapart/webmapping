@@ -1,16 +1,16 @@
 <template>
   <div class="layer-panel">
-    <div v-for="group in layerGroups" :key="group.id">
-      <div class="group-header" @click="toggleGroupVisibility(group.id)">
-        <span>{{ group.name }}</span>
-        <i class="fa" :class="{'fa-chevron-down': group.expanded, 'fa-chevron-up': !group.expanded}"></i>
-      </div>
-      <div class="group" :class="{ expanded: group.expanded }">
-        <div v-for="layer in group.layers" :key="layer.id" class="layer-block">
-          <label>
-            <input type="checkbox" v-model="layer.visible" @change="toggleLayer(layer)" />
-            {{ layer.title }}
-          </label>
+    <div class="wrap-collapsible" v-for="group in layerGroups" :key="group.id">
+      <input :id="'collapsible-' + group.id" class="toggle" type="checkbox">
+      <label :for="'collapsible-' + group.id" class="lbl-toggle">{{ group.name }}</label>
+      <div class="collapsible-content">
+        <div class="content-inner">
+          <div v-for="layer in group.layers" :key="layer.id" class="layer-block">
+            <label>
+              <input type="checkbox" v-model="layer.visible" @change="toggleLayer(layer)" />
+              {{ layer.title }}
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@ export default {
   height: 100%;
   background-color: #F8F8F8;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  padding: 0px 10px 0px;
+  padding: 10px;
   position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
@@ -112,99 +112,88 @@ export default {
       border-radius: 5px;
     }
   }
+  .toggle { 
+    display:none ; 
+  } 
+}
 
-  .group-header {
-    background: #bbbbbb!important;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: left;
-    padding: 5px;
-    width: 100%;
+.lbl-toggle { 
+  display: block; 
+  font-weight: bold; 
+  font-family: monospace; 
+  font-size: 1.2rem; 
+  text-transform: uppercase; 
+  text-align: left; 
+  font-size: 16px;
+  padding: 10px; 
+  color: #fffdfd; 
+  background: #bbbbbb!important; 
+  cursor: pointer; 
+  border-radius: 7px; 
+  transition: all 0.25s ease-out; 
 
-    &:hover,
-    &:focus,
-    &:focus-visible {
-      outline: 4px auto -webkit-focus-ring-color;
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    color: #FFF; 
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+
+  &::before { 
+    content: ' '; 
+    display: inline-block; 
+    border-top: 5px solid transparent; 
+    border-bottom: 5px solid transparent; 
+    border-left: 5px solid currentColor; 
+    vertical-align: middle; 
+    margin-right: .7rem; 
+    transform: translateY(-2px); 
+    transition: transform .2s ease-out; 
+  } 
+}  
+.toggle:checked+.lbl-toggle::before { 
+  transform: rotate(90deg) translateX(-3px); 
+} 
+.collapsible-content { 
+  max-height: 0px; 
+  overflow: hidden; 
+  transition: max-height .25s ease-in-out; 
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &:hover{
+    &::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 5px;
     }
   }
 
-  .group.expanded  {
-    display: block;
+  .content-inner { 
+    padding: 10px 0px 10px 0px; 
   }
 
-  .group {
-    display: none;
-  }
-
-  label {
+  .layer-block{
     display: flex;
     align-items: center;
     text-align: left;
-    line-height: 20px;
-    font-size: 12px;
-    padding: 10px;
+    vertical-align: middle;
+    font-size: 14px;
     color: black;
+    border-radius: 5px;
+    padding: 5px;
+    vertical-align: middle;
 
-    &:hover {
+    &:hover{
       background: #333333!important;
       color: white;
     }
-
-    input {
-      margin-right: 10px;
-    }
   }
-
-  .sticky-legend {
-    display: flex;
-    flex-direction: column;
-    background: white;
-    max-height: 50vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    padding: 10px;
-    position: sticky;
-    border: 1px solid #ddd;
-    bottom: 0;
-    border-top: 1px solid #ccc;
-
-    &::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    &:hover{
-      &::-webkit-scrollbar-thumb {
-        background-color: #555;
-        border-radius: 5px;
-      }
-    }
-
-    h4 {
-      margin-top: 0;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .legend-block {
-      display: flex;
-      flex-direction: column;
-
-      p {
-        font-size: 14px;
-        text-align: left;
-      }
-
-      img {
-        max-width: 100%;
-      }
-    }
-  }
-}
-
-
+} 
+.toggle:checked + .lbl-toggle + .collapsible-content { 
+  max-height: 500px; 
+  overflow-y: scroll;
+  overflow-x: hidden;
+} 
 </style>

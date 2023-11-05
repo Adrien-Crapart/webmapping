@@ -1,20 +1,12 @@
 <template>
-  <!-- <div id="map" class="map"></div> -->
+  <div id="map" class="map"></div>
   <!-- <div class="coordinate-panel">
     Lat(x) / Lon(y): EPSG:4326
     <div id="mouse-position"></div>
   </div> -->
-  <div class="wrap-collabsible">
-    <input id="collapsible" class="toggle" type="checkbox">
-    <label for="collapsible" class="lbl-toggle">More Info</label>
-    <div class="collapsible-content">
-      <div class="content-inner">
-        <p>QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without plug-ins. Test-Driven Development.</p>
-      </div>
-    </div>
-  </div>
   
-  <!-- <layer-panel :layers="layers" @expand-group="toggleGroupVisibility" @toggle-layer="toggleLayer" @change-opacity="changeOpacity"></layer-panel> -->
+  <layer-panel :layers="layers" @expand-group="toggleGroupVisibility" @toggle-layer="toggleLayer" @change-opacity="changeOpacity"></layer-panel>
+  <BasemapSwitcher/>
   <!-- <address-search @address-selected="handleAddressSelected"></address-search> -->
   <!-- <InteractionBar /> -->
   <!-- <CardInfo/> -->
@@ -41,6 +33,7 @@ import CardInfo from './CardInfo.vue';
 import Loader from './Loader.vue';
 import InteractionBar from './InteractionBar.vue';
 import InfoPanel from './InfoPanel.vue';
+import BasemapSwitcher from './BasemapSwitcher.vue'
 
 import { layers } from '../assets/layers';
 
@@ -174,7 +167,8 @@ export default {
     CardInfo,
     Loader, 
     InfoPanel,
-    InteractionBar
+    InteractionBar,
+    BasemapSwitcher
   },
 };
 </script>
@@ -221,66 +215,7 @@ body {
 
 
 
-input[type='checkbox'] { 
-  display: none; 
-} 
-.wrap-collabsible { 
-  margin: 1.2rem 0; 
-} 
-.lbl-toggle { 
-  display: block; 
-  font-weight: bold; 
-  font-family: monospace; 
-  font-size: 1.2rem; 
-  text-transform: uppercase; 
-  text-align: center; 
-  padding: 1rem; 
-  color: #DDD; 
-  background: #0069ff; 
-  cursor: pointer; 
-  border-radius: 7px; 
-  transition: all 0.25s ease-out; 
 
-  &:hover { 
-    color: #FFF; 
-  } 
-
-  &::before { 
-    content: ' '; 
-    display: inline-block; 
-    border-top: 5px solid transparent; 
-    border-bottom: 5px solid transparent; 
-    border-left: 5px solid currentColor; 
-    vertical-align: middle; 
-    margin-right: .7rem; 
-    transform: translateY(-2px); 
-    transition: transform .2s ease-out; 
-  } 
-}  
-.toggle:checked+.lbl-toggle::before { 
-  transform: rotate(90deg) translateX(-3px); 
-} 
-.collapsible-content { 
-  max-height: 0px; 
-  overflow: hidden; 
-  transition: max-height .25s ease-in-out; 
-
-  p { 
-    margin-bottom: 0; 
-  }
-} 
-.toggle:checked + .lbl-toggle + .collapsible-content { 
-  max-height: 350px; 
-} 
-.toggle:checked+.lbl-toggle { 
-  border-bottom-right-radius: 0; 
-  border-bottom-left-radius: 0; 
-} 
-.collapsible-content .content-inner { 
-  border-bottom-left-radius: 7px; 
-  border-bottom-right-radius: 7px; 
-  padding: .5rem 1rem; 
-} 
 
 // .coordinate-panel {
 //   display: flex;

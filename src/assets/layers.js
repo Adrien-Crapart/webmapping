@@ -19,17 +19,6 @@ for (let z = 0; z < 19; ++z) {
 
 export const layers = [
   {
-    id: 1,
-    title: "OSM",
-    visible: true,
-    type: "TileLayer",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 1,
-
-    layer: new TileLayer({ source: new OSM() }),
-  },
-  {
     id: 2,
     title: "Parcelles",
     visible: false,
@@ -173,29 +162,6 @@ export const layers = [
     }),
   },
   {
-    id: 8,
-    title: "Photo Aérienne",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 2,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/inspire/inspire/r/wms?SERVICE=WMS&VERSION=1.3.0",
-        params: {
-          LAYERS: "OI.OrthoimageCoverage.HR",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
     id: 9,
     title: "Zonage",
     visible: false,
@@ -302,29 +268,6 @@ export const layers = [
         params: {
           LAYERS: "info,info_psmv",
           TILED: false,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 14,
-    title: "IGN",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 3,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/ghxp9vajtqbelq0bjzbtsa47/geoportail/r/wms",
-        params: {
-          LAYERS: "GEOGRAPHICALGRIDSYSTEMS.MAPS",
-          TILED: true,
           FORMAT: "image/png",
         },
         serverType: "geoserver",
@@ -626,121 +569,6 @@ export const layers = [
         url: "https://wxs.ign.fr/transports/geoportail/v/wms",
         params: {
           LAYERS: "DGAC-PGS_BDD_FXX_WM_WMS",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 29,
-    title: "Photographies aériennes 1950-1965",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 5,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 30,
-    title: "Photographies aériennes 2000-2005",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 6,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "	ORTHOIMAGERY.ORTHOPHOTOS2000-2005",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 31,
-    title: "Photographies aériennes 2006-2010",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 7,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS2006-2010",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 32,
-    title: "Photographies aériennes 2011-2015",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 8,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "	ORTHOIMAGERY.ORTHOPHOTOS2011-2015",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
-    id: 33,
-    title: "Photographies aériennes 2020",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 9,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
-        params: {
-          LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS2020",
           TILED: true,
           FORMAT: "image/png",
         },
