@@ -648,29 +648,6 @@ export const layers = [
     }),
   },
   {
-    id: 36,
-    title: "Carte de l'état-major",
-    visible: false,
-    type: "TileWMS",
-    legend: "",
-    layer_group: "Fond de cartes",
-    layer_order: 10,
-    layer: new TileLayer({
-      opacity: 1,
-      source: new TileWMS({
-        url: "https://wxs.ign.fr/cartes/geoportail/r/wms",
-        params: {
-          LAYERS: "GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40",
-          TILED: true,
-          FORMAT: "image/png",
-        },
-        serverType: "geoserver",
-        visible: true,
-        transition: 0,
-      }),
-    }),
-  },
-  {
     id: 37,
     title: "Courbes de niveau",
     visible: false,

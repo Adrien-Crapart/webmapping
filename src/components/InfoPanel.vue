@@ -1,7 +1,6 @@
 <template>
   <div class="offcanvas-panel" :class="{ active: isPanelActive }">
     <interaction-bar/>
-    <BasemapPanel :basemaps="basemaps" :selectedBasemap="selectedBasemap" @basemap-selected="changeBasemap" />
     <button class="toggle-button" :class="{ active: isPanelActive }" @click="togglePanel">
     <img :src="isPanelActive ? 'src/assets/chevrons-down-regular-24.png' : 'src/assets/chevrons-up-regular-24.png'" alt="Toggle Panel" />
     </button>
@@ -10,7 +9,6 @@
 
 <script>
 import InteractionBar from './InteractionBar.vue';
-import BasemapPanel from './BaseMapPanel_old.vue';
 
 export default {
   data() {
@@ -25,7 +23,6 @@ export default {
   },
   components: {
     InteractionBar,
-    BasemapPanel,
   },
 };
 </script>

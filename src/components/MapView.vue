@@ -1,28 +1,23 @@
 <template>
   <div id="map" class="map"></div>
-  <!-- <div class="coordinate-panel">
+  <div class="coordinate-panel">
     Lat(x) / Lon(y): EPSG:4326
     <div id="mouse-position"></div>
-  </div> -->
-  
-  <layer-panel :layers="layers" @expand-group="toggleGroupVisibility" @toggle-layer="toggleLayer" @change-opacity="changeOpacity"></layer-panel>
-  <BasemapSwitcher/>
-  <!-- <address-search @address-selected="handleAddressSelected"></address-search> -->
-  <!-- <InteractionBar /> -->
-  <!-- <CardInfo/> -->
-  <!-- <InfoPanel /> -->
-  <!-- <Loader/> -->
+  </div>
+  <layer-panel :layers="layers" @toggle-layer="toggleLayer"></layer-panel>
+  <BasemapSwitcher :basemaps="basemaps" @toggle-layer="toggleLayer"/>
+  <address-search @address-selected="handleAddressSelected"></address-search>
+  <InteractionBar />
+  <CardInfo/>
+  <Loader/>
 </template>
 
 <script>
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import TileWMS from 'ol/source/TileWMS.js';
-import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
-import { DragRotateAndZoom, defaults as defaultInteractions} from 'ol/interaction.js';
+import { DragRotateAndZoom, Link, defaults as defaultInteractions} from 'ol/interaction.js';
 import { ScaleLine, defaults as defaultControls } from 'ol/control.js';
 import { createStringXY } from 'ol/coordinate.js';
 import MousePosition from 'ol/control/MousePosition.js';
@@ -30,12 +25,12 @@ import MousePosition from 'ol/control/MousePosition.js';
 import LayerPanel from './LayerPanel.vue';
 import AddressSearch from './AddressSearch.vue';
 import CardInfo from './CardInfo.vue';
-import Loader from './Loader.vue';
+import Loader from './Loader_1.vue';
 import InteractionBar from './InteractionBar.vue';
-import InfoPanel from './InfoPanel.vue';
 import BasemapSwitcher from './BasemapSwitcher.vue'
 
 import { layers } from '../assets/layers';
+import { basemaps } from "../assets/basemaps";
 
 export default {
   data() {
@@ -43,16 +38,8 @@ export default {
       selectedCoordinates: null,
       map: null,
       mapView: null,
-      isExpanded: false,
-      isColumnExpanded: true,
-      basemaps: [
-        { id: 'osm-color', title: 'OSM Color', imageUrl: 'src/assets/ic_default-1x.png' },
-        { id: 'osm-bw', title: 'OSM Black and White', imageUrl: 'src/assets/ic_terrain-1x.png' },
-        { id: 'satellite', title: 'Satellite', imageUrl: 'src/assets/aerien.jpg' },
-        { id: 'ign', title: 'IGN', imageUrl: 'src/assets/ic_traffic-1x.png' },
-      ],
-      selectedBasemap: 'osm-color',
-      layers: [...layers]
+      layers: [...layers],
+      basemaps: [...basemaps]
     };
   },
   mounted() {
@@ -80,66 +67,55 @@ export default {
             target: document.getElementById('mouse-position'),
           })
         ]),
-        interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
-        layers: this.layers.map(layer => layer.layer),
+        interactions: defaultInteractions().extend([new DragRotateAndZoom(), new Link()]),
+        layers: [
+          ...this.basemaps.map(basemap => {
+            basemap.layer.setZIndex(1);
+            return basemap.layer;
+          }),
+          ...this.layers.map(layer => {
+            layer.layer.setZIndex(2);
+            return layer.layer;
+          })
+        ],
         view: this.mapView
       });
 
       // Set the initial visibility of layers
+      this.basemaps.forEach(layer => {
+        layer.layer.setVisible(layer.visible);
+      });
       this.layers.forEach(layer => {
         layer.layer.setVisible(layer.visible);
       });
-    },
-    changeBasemap(basemap) {
-      // Remove the current basemap layer from the map
-      this.map.getLayers().forEach(layer => {
-        if (layer.get('name') === 'basemap') {
-          this.map.removeLayer(layer);
+
+      this.map.on('singleclick', function (evt) {
+        document.getElementById('info').innerHTML = '';
+        const viewResolution = /** @type {number} */ (this.mapView.getResolution());
+        const url = wmsSource.getFeatureInfoUrl(
+          evt.coordinate,
+          viewResolution,
+          'EPSG:3857',
+          {'INFO_FORMAT': 'text/html'}
+        );
+        if (url) {
+          fetch(url)
+            .then((response) => response.text())
+            .then((html) => {
+              document.getElementById('info').innerHTML = html;
+            });
         }
       });
 
-      // Define a new basemap layer based on the selected basemap
-      let basemapLayer;
-      switch (basemap.id) {
-        case 'osm-color':
-          basemapLayer = new TileLayer({
-            source: new OSM(),
-            name: 'basemap',
-          });
-          break;
-        case 'osm-bw':
-          basemapLayer = new TileLayer({
-            source: new OSM({ url: 'https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png' }),
-            name: 'basemap',
-          });
-          break;
-        case 'satellite':
-          basemapLayer = new TileLayer({
-            source: new XYZ({
-              url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            }),
-            name: 'basemap',
-          });
-          break;
-        case 'ign':
-          basemapLayer = new TileLayer({
-            source: new TileWMS({
-              url: 'https://wxs.ign.fr/your-ign-wms-url',
-              params: {
-                LAYERS: 'your-ign-layer',
-                FORMAT: 'image/png',
-              },
-            }),
-            name: 'basemap',
-          });
-          break;
-        default:
-          break;
-      }
-
-      this.map.getLayers().insertAt(0, basemapLayer);
-      this.map.getView().fit(basemapLayer.getSource().getExtent());
-      this.selectedBasemap = basemap.id;
+      this.map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+          return;
+        }
+        const data = wmsLayer.getData(evt.pixel);
+        const hit = data && data[3] > 0; // transparent pixels have zero for data[3]
+        this.map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+      });
+      
     },
     toggleLayer(layer) {
       layer.layer.setVisible(layer.visible);
@@ -154,19 +130,12 @@ export default {
         this.mapView.setZoom(this.selectedCoordinates.zoomLevel);
       }
     },
-    toggleExpand() {
-      this.isExpanded = !this.isExpanded;
-    },
-    toggleColumn() {
-      this.isColumnExpanded = !this.isColumnExpanded;
-    },
   },
   components: {
     LayerPanel,
     AddressSearch,
     CardInfo,
     Loader, 
-    InfoPanel,
     InteractionBar,
     BasemapSwitcher
   },
@@ -212,38 +181,22 @@ body {
     top: 3em;
   }
 }
-
-
-
-
-
-// .coordinate-panel {
-//   display: flex;
-//   flex-direction: column;
-//   position: fixed;
-//   z-index: 3;
-//   width: 20vw;
-//   height: 3.5vh;
-//   background: white;
-//   padding: 1.5px 2px 1.5px 2px;
-//   border-radius: 5px;
-//   left: 23vw;
-//   bottom: 0.5vh;
-//   box-shadow: 5px 6px 24px -2px rgba(0,0,0,0.3);
-//   align-items: left;
-//   justify-content: left;
-//   font-size: 10px;
-//   font-weight: 500;
-// }
-
-// .ol-mouse-position {
-//     position: none;
-//     top: 0;
-//     right: 0;
-//     margin-top: 10px;
-//     display: flex;
-//     font-size: 12px;
-//     font-weight: 500;
-//     padding: 10px;
-//   }
+.coordinate-panel {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 3;
+  width: 20vw;
+  height: 3.5vh;
+  background: white;
+  padding: 1.5px 2px 1.5px 2px;
+  border-radius: 5px;
+  left: 23vw;
+  bottom: 1vh;
+  box-shadow: 5px 6px 24px -2px rgba(0,0,0,0.3);
+  align-items: left;
+  justify-content: left;
+  font-size: 10px;
+  font-weight: 500;
+}
 </style>

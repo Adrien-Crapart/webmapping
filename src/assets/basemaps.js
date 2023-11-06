@@ -2,7 +2,7 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 
-export const layers = [
+export const basemaps = [
   {
     id: 1,
     title: "OSM",
@@ -173,6 +173,30 @@ export const layers = [
         url: "https://wxs.ign.fr/orthohisto/geoportail/r/wms",
         params: {
           LAYERS: "ORTHOIMAGERY.ORTHOPHOTOS2020",
+          TILED: true,
+          FORMAT: "image/png",
+        },
+        serverType: "geoserver",
+        visible: true,
+        transition: 0,
+      }),
+    }),
+  },
+  {
+    id: 8,
+    title: "Carte de l'état-major",
+    visible: false,
+    type: "TileWMS",
+    legend: "",
+    layer_group: "Fond de cartes",
+    layer_order: 9,
+    imageSrc: "./src/assets/positron.png",
+    layer: new TileLayer({
+      opacity: 1,
+      source: new TileWMS({
+        url: "https://wxs.ign.fr/cartes/geoportail/r/wms",
+        params: {
+          LAYERS: "GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40",
           TILED: true,
           FORMAT: "image/png",
         },

@@ -1,44 +1,41 @@
 <template>
   <div class="basemap-switcher">
-    <div v-for="layer in layers" :key="layer.id">
+    <div v-for="basemap in basemaps" :key="basemap.id">
       <div
-        @mouseover="showTooltip(layer.id)"
-        @mouseout="hideTooltip(layer.id)"
+        @mouseover="showTooltip(basemap.id)"
+        @mouseout="hideTooltip(basemap.id)"
         class="image-container"
       >
         <img
-          :src="layer.imageSrc"
-          :class="{ active: layer.visible }"
-          @click="switchBasemap(layer.id)"
+          :src="basemap.imageSrc"
+          :class="{ active: basemap.visible }"
+          @click="switchBasemap(basemap.id)"
         />
-        <div class="tooltip" v-if="layer.showTooltip">{{ layer.title }}</div>
+        <div class="tooltip" v-if="basemap.showTooltip">{{ basemap.title }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { layers } from "../assets/basemaps";
 
 export default {
-  data() {
-    return {
-      layers: layers,
-    };
+  props: {
+    basemaps: Array,
   },
   methods: {
     switchBasemap(layerId) {
-      this.layers.forEach((layer) => {
+      this.basemaps.forEach((layer) => {
         layer.visible = layer.id === layerId;
       });
     },
     showTooltip(layerId) {
-      this.layers.forEach((layer) => {
+      this.basemaps.forEach((layer) => {
         layer.showTooltip = layer.id === layerId;
       });
     },
     hideTooltip(layerId) {
-      this.layers.forEach((layer) => {
+      this.basemaps.forEach((layer) => {
         layer.showTooltip = false;
       });
     },

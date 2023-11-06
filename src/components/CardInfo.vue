@@ -31,7 +31,7 @@ export default {
 .card{
     position: absolute;
     top: 20vh;
-    right: 2vw;
+    right: 6vw;
     width: 350px;
     height: 190px;
     background: #fff;

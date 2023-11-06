@@ -15,13 +15,6 @@ export default {
 </script>
 
 <style>
-        body {
-        background-color: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        }
 
       .dots-container {
         display: flex;
@@ -29,6 +22,7 @@ export default {
         justify-content: center;
         height: 100%;
         width: 100%;
+        z-index: 3;
       }
       .dot {
         height: 20px;
