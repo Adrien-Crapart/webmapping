@@ -1,14 +1,18 @@
 <template>
   <div id="map" class="map"></div>
   <div class="coordinate-panel">
-    Lat(x) / Lon(y): EPSG:4326
+    <!-- Lat(x) / Lon(y): EPSG:4326 -->
     <div id="mouse-position"></div>
+  </div>
+  <div id="popup" class="ol-popup">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content"></div>
   </div>
   <layer-panel :layers="layers" @toggle-layer="toggleLayer"></layer-panel>
   <BasemapSwitcher :basemaps="basemaps" @toggle-layer="toggleLayer"/>
   <address-search @address-selected="handleAddressSelected"></address-search>
   <InteractionBar />
-  <CardInfo/>
+  <!-- <CardInfo/> -->
   <Loader/>
 </template>
 
@@ -21,6 +25,11 @@ import { DragRotateAndZoom, Link, defaults as defaultInteractions} from 'ol/inte
 import { ScaleLine, defaults as defaultControls } from 'ol/control.js';
 import { createStringXY } from 'ol/coordinate.js';
 import MousePosition from 'ol/control/MousePosition.js';
+import Overlay from 'ol/Overlay';
+import { toStringHDMS } from 'ol/coordinate';
+import { click } from 'ol/events/condition';
+import { Image as ImageLayer } from 'ol/layer';
+import ImageWMS from 'ol/source/ImageWMS';
 
 import LayerPanel from './LayerPanel.vue';
 import AddressSearch from './AddressSearch.vue';
@@ -89,31 +98,48 @@ export default {
         layer.layer.setVisible(layer.visible);
       });
 
-      this.map.on('singleclick', function (evt) {
-        document.getElementById('info').innerHTML = '';
-        const viewResolution = /** @type {number} */ (this.mapView.getResolution());
-        const url = wmsSource.getFeatureInfoUrl(
-          evt.coordinate,
-          viewResolution,
-          'EPSG:3857',
-          {'INFO_FORMAT': 'text/html'}
-        );
-        if (url) {
-          fetch(url)
-            .then((response) => response.text())
-            .then((html) => {
-              document.getElementById('info').innerHTML = html;
-            });
-        }
+      const popup = new Overlay({
+        element: document.getElementById('popup'),
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
       });
+      this.map.addOverlay(popup);
 
-      this.map.on('pointermove', function (evt) {
-        if (evt.dragging) {
-          return;
-        }
-        const data = wmsLayer.getData(evt.pixel);
-        const hit = data && data[3] > 0; // transparent pixels have zero for data[3]
-        this.map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+      this.map.on('click', (evt) => {
+        const viewResolution = this.mapView.getResolution();
+        const coordinate = evt.coordinate;
+
+        // Iterate over all layers
+        this.map.getLayers().forEach((layer) => {
+          if (layer instanceof ImageLayer && layer.getVisible()) {
+            const source = layer.getSource();
+            if (source instanceof ImageWMS) {
+              // Build GetFeatureInfo URL for the clicked coordinate
+              const url = source.getGetFeatureInfoUrl(
+                coordinate,
+                viewResolution,
+                'EPSG:4326', // Change to the appropriate projection
+                { INFO_FORMAT: 'text/html' } // Request format, could be 'text/plain' or 'application/json' depending on the server
+              );
+
+              if (url) {
+                // Fetch GetFeatureInfo response and display it in the popup
+                fetch(url)
+                  .then((response) => response.text())
+                  .then((html) => {
+                    // Display the response in the popup content
+                    document.getElementById('popup-content').innerHTML = html;
+
+                    // Show the popup
+                    popup.setPosition(coordinate);
+                    popup.getElement().style.display = 'block';
+                  });
+              }
+            }
+          }
+        });
       });
       
     },
@@ -186,17 +212,36 @@ body {
   flex-direction: column;
   position: fixed;
   z-index: 3;
-  width: 20vw;
-  height: 3.5vh;
+  width: 6.5vw;
+  height: 3vh;
   background: white;
   padding: 1.5px 2px 1.5px 2px;
   border-radius: 5px;
   left: 23vw;
-  bottom: 1vh;
+  bottom: 1.2vh;
   box-shadow: 5px 6px 24px -2px rgba(0,0,0,0.3);
   align-items: left;
   justify-content: left;
   font-size: 10px;
   font-weight: 500;
+}
+.ol-popup {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+}
+
+.ol-popup-closer:after {
+  content: '✖';
 }
 </style>

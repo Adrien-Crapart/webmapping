@@ -88,7 +88,8 @@ export default {
 
 <style scoped lang="scss">
 .layer-panel {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 315px;
   height: 100%;
   background-color: #F8F8F8;
@@ -101,6 +102,7 @@ export default {
   left: 0;
   z-index: 2;
   transition: all 0.5s ease;
+  gap: 1%;
 
   &::-webkit-scrollbar {
     width: 10px;
