@@ -2,7 +2,7 @@
   <div class="layer-panel">
     <div class="wrap-collapsible" v-for="group in layerGroups" :key="group.id">
       <input :id="'collapsible-' + group.id" class="toggle" type="checkbox">
-      <label :for="'collapsible-' + group.id" class="lbl-toggle">{{ group.name }}</label>
+      <label :for="'collapsible-' + group.id" class="lbl-toggle">{{ group.name }} ({{ group.layers.length }})</label>
       <div class="collapsible-content">
         <div class="content-inner">
           <div v-for="layer in group.layers" :key="layer.id" class="layer-block">
